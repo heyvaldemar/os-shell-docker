@@ -11,13 +11,14 @@
 #   - redis with sysctl: a privileged init container sets
 #     net.core.somaxconn, and redis must see the new value.
 # Both releases must become Ready with the init container exited 0 on this
-# image. The charts are pinned; their main images are the charts' defaults.
+# image. The charts are pinned (postgresql 18.12.16, redis 28.3.10); their main
+# images are the charts' defaults.
 set -euo pipefail
 IMAGE="${1:?usage: charts-e2e.sh <image>}"
 CLUSTER="${CLUSTER:-os-shell-e2e}"
 KIND_NODE="${KIND_NODE:-}"
 POSTGRESQL_CHART="${POSTGRESQL_CHART:-18.12.16}"
-REDIS_CHART="${REDIS_CHART:-}"
+REDIS_CHART="${REDIS_CHART:-28.3.10}"
 SOMAXCONN=4096
 fail=0
 bad() { echo "FAIL: $*" >&2; fail=1; }
