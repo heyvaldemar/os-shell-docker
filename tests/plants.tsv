@@ -1,0 +1,13 @@
+# file	old	new	what the tests must notice
+"Dockerfile"	"USER 1001"	"USER 0"	"the image runs as root"
+"Dockerfile"	"SHELL [\"/bin/bash\", \"-o\", \"errexit\", \"-o\", \"nounset\", \"-o\", \"pipefail\", \"-c\"]\n"	""	"an image built FROM this one loses bitnami/os-shell's errexit, nounset and pipefail"
+"Dockerfile"	"CMD [\"/bin/bash\"]"	"CMD [\"sh\"]"	"the command is not /bin/bash"
+"Dockerfile"	"packages=\"ca-certificates curl jq "	"packages=\"ca-certificates jq "	"curl left out of the image"
+"Dockerfile"	" perl procps tzdata "	" perl tzdata "	"sysctl, ps and kill (procps) left out of the image"
+"Dockerfile"	"COPY --from=tools /out/bin/ /opt/bitnami/common/bin/\n"	""	"Bitnami's helpers (wait-for-port, render-template, ini-file, scuttle, yq) left out"
+"Dockerfile"	"PATH=/opt/bitnami/common/bin:/usr/local/sbin"	"PATH=/usr/local/sbin"	"the helpers are no longer first on PATH"
+"Dockerfile"	"ENV HOME=/ \\"	"ENV HOME=/root \\"	"HOME moves away from /"
+"Dockerfile"	"packages=\"$packages insserv lsb-base startpar sysv-rc\""	"packages=\"$packages\""	"the Debian 12 line leaves out insserv, startpar and the sysv-rc tools"
+"Dockerfile"	"ARG YQ=v4.54.1:504fc38780cc46be8444ea1b72fb55919fc0bfb0"	"ARG YQ=v4.54.1:0000000000000000000000000000000000000000"	"a yq from a commit other than the pinned one is built"
+"Dockerfile"	"ARG WAIT_FOR_PORT=v1.0.11:7874547cb49ec88b92a5fbf3dfee28bd6694cfc4"	"ARG WAIT_FOR_PORT=v1.0.11:0000000000000000000000000000000000000000"	"a helper from a commit other than the pinned one is built"
+"Dockerfile"	"build scuttle redboxllc/scuttle \"$SCUTTLE\" \"-X main.Version=${SCUTTLE%%:*}\" lift"	"build scuttle redboxllc/scuttle \"$SCUTTLE\" \"-X main.Version=${SCUTTLE%%:*}\" \"\""	"scuttle is built with its 2020 golang.org/x libraries again"

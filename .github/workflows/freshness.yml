@@ -1,0 +1,56 @@
+name: Pin Freshness
+# The pins that do not move with the weekly build: the three base digests and
+# the five helpers' release tags. Each goes red here when upstream has moved,
+# so the bump is a pull request someone reads, not a surprise in a Monday
+# build.
+on:
+  schedule:
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pins:
+    name: The base images and helpers against upstream
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Each pinned base digest still names its tag
+        if: always()
+        run: |
+          set -euo pipefail
+          fail=0
+          for name in golang:1.27-bookworm debian:bookworm-slim debian:trixie-slim; do
+            pinned="$(grep -m1 -oE "${name}@sha256:[0-9a-f]{64}" Dockerfile)"
+            current="$(docker buildx imagetools inspect "$name" --format '{{json .Manifest}}' | jq -r .digest)"
+            if [ "${pinned#*@}" != "$current" ]; then
+              echo "::error::${name} is now ${current}; the Dockerfile pins ${pinned#*@}"; fail=1
+            else
+              echo "${name} ${current} is the pinned digest"
+            fi
+          done
+          exit "$fail"
+
+      - name: Each helper is its newest release
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          fail=0
+          for row in WAIT_FOR_PORT:bitnami/wait-for-port RENDER_TEMPLATE:bitnami/render-template INI_FILE:bitnami/ini-file SCUTTLE:redboxllc/scuttle YQ:mikefarah/yq; do
+            arg="${row%%:*}"; repo="${row#*:}"
+            pinned="$(sed -nE "s/^ARG ${arg}=(v[0-9.]+):[0-9a-f]{40}$/\1/p" Dockerfile)"
+            latest="$(gh api "repos/${repo}/releases/latest" --jq .tag_name)"
+            if [ "$pinned" != "$latest" ]; then
+              echo "::error::${repo} ${latest} is out; the Dockerfile pins ${pinned} (update ${arg} with the tag and its commit)"; fail=1
+            else
+              echo "${repo} ${pinned} is the newest release"
+            fi
+          done
+          exit "$fail"

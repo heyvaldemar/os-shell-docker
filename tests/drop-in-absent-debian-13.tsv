@@ -1,0 +1,18 @@
+# Absent on the Debian 13 line only: tools Debian 13 no longer ships. No Debian 13 package carries
+# these names (packages.debian.org contents search, trixie, 2026-10-28), except where a reason says.
+apt-key	removed from apt in Debian 13
+dpkg-fsys-usrunmess	removed from dpkg in Debian 13
+md5sum.textutils	a Debian 12 compatibility link, gone in Debian 13
+perl5.36*	versioned name of Debian 12's perl 5.36; this line has perl 5.40 under its plain name
+cpan5.36*	versioned name of Debian 12's perl 5.36
+addpart	dropped from util-linux in Debian 13
+delpart	dropped from util-linux in Debian 13
+utmpdump	dropped from util-linux in Debian 13
+mesg	dropped from util-linux in Debian 13
+cpgr	dropped from shadow in Debian 13
+cppw	dropped from shadow in Debian 13
+faillog	dropped from shadow in Debian 13
+groupmems	dropped from shadow in Debian 13
+lastlog	dropped in Debian 13 (lastlog2 replaces it, with a database an init container has no use for)
+last	moved to the wtmpdb package in Debian 13, which keeps a login database an init container has no use for
+lastb	dropped in Debian 13 with last's old implementation

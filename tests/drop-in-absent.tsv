@@ -1,0 +1,7 @@
+# Executables the last versioned bitnami/os-shell image (bitnamilegacy/os-shell:12-debian-12-r51,
+# Debian 12) has on its PATH and this image does not, on every line. A shell glob, a tab, the reason.
+# tests/drop-in-test.sh fails on any absence not matched here or in drop-in-absent-debian-<N>.tsv.
+install_packages	Bitnami's own package helper script, not part of Debian
+uninstall_packages	Bitnami's own package helper script, not part of Debian
+run-script	Bitnami's own helper script
+initctl	minideb's stub that keeps services from starting during apt-get install; not part of Debian, and this image starts no services
