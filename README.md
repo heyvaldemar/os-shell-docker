@@ -3,6 +3,7 @@
 [![Publish Docker Image](https://github.com/heyvaldemar/os-shell-docker/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/os-shell-docker/actions/workflows/publish.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/heyvaldemar/os-shell.svg)](https://hub.docker.com/r/heyvaldemar/os-shell)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/heyvaldemar/os-shell-docker/badge)](https://scorecard.dev/viewer/?uri=github.com/heyvaldemar/os-shell-docker)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16090/badge)](https://www.bestpractices.dev/projects/16090)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Debian shell for the init containers Helm charts run before their application: fixing the owner of a data volume, setting a kernel parameter, waiting for a port. Rebuilt every week, signed, and laid out like `bitnami/os-shell`, so a chart written for that image runs on this one unchanged.
