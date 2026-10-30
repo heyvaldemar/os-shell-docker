@@ -9,6 +9,10 @@ and the pipeline that builds it.
 
 ## [Unreleased]
 
+_(no unreleased changes yet)_
+
+## [1.0.0] - 2026-10-30
+
 ### Added
 
 - **heyvaldemar/os-shell: Debian 12 and Debian 13, each rebuilt every week.** Tags `12`, `13` and `latest` (the newest line); `linux/amd64` and `linux/arm64`. `bitnami/os-shell` has published only `latest` since August 2025, built on Photon OS, and its versioned Debian tags stopped at `12-debian-12-r51`.
@@ -19,3 +23,6 @@ and the pipeline that builds it.
 - **A contract with the published image**: nothing an init container used under a tag disappears from it without a line in `tests/contract-removed.tsv`.
 - **Every digest signed** with cosign, keyless, with SBOM, SLSA provenance and a GitHub build attestation; Trivy on every published line; CVE counts against the images it replaces after every publish.
 - **Every test shown the breaks it exists for**: twelve planted violations in `tests/plants.tsv`, run in CI.
+
+[Unreleased]: https://github.com/heyvaldemar/os-shell-docker/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.0

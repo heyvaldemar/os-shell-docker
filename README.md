@@ -7,7 +7,7 @@
 
 A Debian shell for the init containers Helm charts run before their application: fixing the owner of a data volume, setting a kernel parameter, waiting for a port. Rebuilt every week, signed, and laid out like `bitnami/os-shell`, so a chart written for that image runs on this one unchanged.
 
-`bitnami/os-shell` has published one tag since August 2025: `latest`, and it is no longer Debian. It is built on VMware Photon OS 5.0. The versioned Debian tags stopped at `12-debian-12-r51` on 2025-08-19 and live on, unmaintained, as `bitnamilegacy/os-shell`, pulled 2.96 million times by 2026-10-28. A chart that pinned one of those tags stopped receiving fixes that day: on 2026-10-29 Trivy found 18 critical and 172 high findings in `12-debian-12-r51`, and 119 of them have a fix that image will never get.
+`bitnami/os-shell` has published one tag since August 2025: `latest`, and it is no longer Debian. It is built on VMware Photon OS 5.0. The versioned Debian tags stopped at `12-debian-12-r51` on 2025-08-19 and live on, unmaintained, as `bitnamilegacy/os-shell`, pulled 2.96 million times by 2026-10-28. A chart that pinned one of those tags stopped receiving fixes that day: on 2026-10-30 Trivy found 19 critical and 171 high findings in `12-debian-12-r51`, and 119 of them have a fix that image will never get.
 
 ```bash
 docker run --rm heyvaldemar/os-shell:12 bash -c 'id; cat /etc/debian_version'
@@ -60,11 +60,11 @@ Charts depend on how the image runs, not only on its shell. This one keeps what 
 
 ## CVE counts
 
-Counted by Trivy 0.76.1 on 2026-10-29, on `linux/amd64`, once per CVE and package, with no vendor statements applied:
+Counted by Trivy 0.76.1 on 2026-10-30 in [run 40994910781](https://github.com/heyvaldemar/os-shell-docker/actions/runs/40994910781), on the images as published, on `linux/amd64`, once per CVE and package, with no vendor statements applied:
 
 | Image | What it is | OS | Critical | High | Medium | Low | Critical and high with a fix |
 |---|---|---|---|---|---|---|---|
-| `bitnamilegacy/os-shell:12-debian-12-r51` | the last versioned `bitnami/os-shell`, frozen 2025-08-19 | Debian 12.11 | 18 | 172 | 289 | 217 | 119 |
+| `bitnamilegacy/os-shell:12-debian-12-r51` | the last versioned `bitnami/os-shell`, frozen 2025-08-19 | Debian 12.11 | 19 | 171 | 289 | 217 | 119 |
 | `bitnami/os-shell:latest` | what `bitnami/os-shell` publishes now | Photon OS 5.0 | 0 | 5 | 13 | 1 | 5 |
 | `heyvaldemar/os-shell:12` | this image, Debian 12 line | Debian 12.15 | 1 | 71 | 125 | 166 | 0 |
 | `heyvaldemar/os-shell:13` | this image, Debian 13 line | Debian 13.7 | 0 | 56 | 95 | 156 | 0 |
