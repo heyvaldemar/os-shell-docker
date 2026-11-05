@@ -28,7 +28,7 @@ ARG DEBIAN_MAJOR=12
 # smallest change that removes the findings; the build and the tests are what
 # say it still works.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:d9b6a1beb9474adc2a1ce842573639b44b2a0dd49b6669f51d3821baf9ec37c9 AS tools
+FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:b08bc99468058b6d8a0ada17fa54996b910d5e82a7e95bee0372e3bd98415258 AS tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -72,8 +72,8 @@ RUN set -euo pipefail; \
 # ──────────────────────────────────────────────────────────────────────────────
 # Stage 2: the image. Both bases are pinned by digest; DEBIAN_MAJOR picks one.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3 AS base-12
-FROM debian:trixie-slim@sha256:f6b08b09a05725f9431502d3b5714f5c4576e82c1a84fa1debe0c24a7e0c3ec4 AS base-13
+FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc AS base-12
+FROM debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2 AS base-13
 
 # hadolint ignore=DL3006
 FROM base-${DEBIAN_MAJOR} AS final

@@ -11,6 +11,12 @@ and the pipeline that builds it.
 
 _(no unreleased changes yet)_
 
+## [1.0.1] - 2026-11-05
+
+### Changed
+
+- **Debian's 2026-11-04 repush of `debian:bookworm-slim` and `debian:trixie-slim` is the base of the `12` and `13` lines**, and the helpers are built in the rebuilt `golang:1.27-bookworm`, still Go 1.27.3. The pins move: bookworm-slim `sha256:99c0b25c…` to `sha256:734a72b3…`, trixie-slim `sha256:f6b08b09…` to `sha256:a72b4433…`, golang `sha256:d9b6a1be…` to `sha256:b08bc994…`. The helpers' commits and modules stay as they were.
+
 ## [1.0.0] - 2026-10-30
 
 ### Added
@@ -24,5 +30,6 @@ _(no unreleased changes yet)_
 - **Every digest signed** with cosign, keyless, with SBOM, SLSA provenance and a GitHub build attestation; Trivy on every published line; CVE counts against the images it replaces after every publish.
 - **Every test shown the breaks it exists for**: twelve planted violations in `tests/plants.tsv`, run in CI.
 
-[Unreleased]: https://github.com/heyvaldemar/os-shell-docker/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/heyvaldemar/os-shell-docker/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.1
 [1.0.0]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.0
