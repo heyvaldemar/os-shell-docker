@@ -22,13 +22,13 @@ ARG DEBIAN_MAJOR=12
 # checksum database verify every dependency. Built on the build platform and
 # cross-compiled, so no emulation runs Go.
 #
-# Two of them name golang.org/x libraries with fixed vulnerabilities: scuttle's
-# last release (2022) pins x/net and x/text from 2020, and yq's release pins an
-# x/net one release behind. Those two get the versions pinned below, the
-# smallest change that removes the findings; the build and the tests are what
-# say it still works.
+# scuttle's last release (2022) pins golang.org/x/net and x/text from 2020,
+# with fixed vulnerabilities. It gets the versions pinned below, the smallest
+# change that removes the findings; the build and the tests are what say it
+# still works. The other four are built with the modules their releases name,
+# and the CVE gate is what says that is still enough.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:b08bc99468058b6d8a0ada17fa54996b910d5e82a7e95bee0372e3bd98415258 AS tools
+FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:dc0963f32053e4bc451d24d87e3892d42d01021b61f093e98eb95c0352bb84b0 AS tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -36,7 +36,7 @@ ARG WAIT_FOR_PORT=v1.0.11:7874547cb49ec88b92a5fbf3dfee28bd6694cfc4
 ARG RENDER_TEMPLATE=v1.0.10:bc9a6df0be359c708fdc675c7e2d3e5a92a4ab40
 ARG INI_FILE=v1.4.10:e7032a7f1f507af21709946d0d2a440124d1488b
 ARG SCUTTLE=v1.3.7:1c2b697935c10ef4b3e5e0dc0cf573a4d8766269
-ARG YQ=v4.54.1:504fc38780cc46be8444ea1b72fb55919fc0bfb0
+ARG YQ=v4.54.2:a4330671f17776618660a419ab2531e4f4dc48b6
 ARG X_NET=v0.62.0
 ARG X_TEXT=v0.43.0
 
@@ -66,7 +66,7 @@ RUN set -euo pipefail; \
     build render-template bitnami/render-template "$RENDER_TEMPLATE" "" ""; \
     build ini-file bitnami/ini-file "$INI_FILE" "" ""; \
     build scuttle redboxllc/scuttle "$SCUTTLE" "-X main.Version=${SCUTTLE%%:*}" lift; \
-    build yq mikefarah/yq "$YQ" "" lift; \
+    build yq mikefarah/yq "$YQ" "" ""; \
     printf "built with %s\n" "$(go env GOVERSION)" >> /out/helpers.txt
 
 # ──────────────────────────────────────────────────────────────────────────────

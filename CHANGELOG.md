@@ -11,6 +11,13 @@ and the pipeline that builds it.
 
 _(no unreleased changes yet)_
 
+## [1.0.2] - 2026-11-07
+
+### Changed
+
+- **yq v4.54.2**, built from the commit its tag names. It quotes unsafe values in `-o=shell -r` output (GHSA-h2cv-65fq-jgrp) and fixes `map_values`, `ireduce` and comment handling; the rest is in its release notes. Its release already names `golang.org/x/net` v0.62.0 and `x/text` v0.43.0, the versions this build used to raise it to, so yq is now built with the modules it names; only `scuttle` still gets newer ones.
+- **The repushed `golang:1.27-bookworm`** builds the helpers: `sha256:b08bc994…` to `sha256:dc0963f3…`, still Go 1.27.3.
+
 ## [1.0.1] - 2026-11-05
 
 ### Changed
@@ -30,6 +37,7 @@ _(no unreleased changes yet)_
 - **Every digest signed** with cosign, keyless, with SBOM, SLSA provenance and a GitHub build attestation; Trivy on every published line; CVE counts against the images it replaces after every publish.
 - **Every test shown the breaks it exists for**: twelve planted violations in `tests/plants.tsv`, run in CI.
 
-[Unreleased]: https://github.com/heyvaldemar/os-shell-docker/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/heyvaldemar/os-shell-docker/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.2
 [1.0.1]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.1
 [1.0.0]: https://github.com/heyvaldemar/os-shell-docker/releases/tag/v1.0.0

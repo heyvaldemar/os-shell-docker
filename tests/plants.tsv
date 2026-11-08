@@ -8,6 +8,6 @@
 "Dockerfile"	"PATH=/opt/bitnami/common/bin:/usr/local/sbin"	"PATH=/usr/local/sbin"	"the helpers are no longer first on PATH"
 "Dockerfile"	"ENV HOME=/ \\"	"ENV HOME=/root \\"	"HOME moves away from /"
 "Dockerfile"	"packages=\"$packages insserv lsb-base startpar sysv-rc\""	"packages=\"$packages\""	"the Debian 12 line leaves out insserv, startpar and the sysv-rc tools"
-"Dockerfile"	"ARG YQ=v4.54.1:504fc38780cc46be8444ea1b72fb55919fc0bfb0"	"ARG YQ=v4.54.1:0000000000000000000000000000000000000000"	"a yq from a commit other than the pinned one is built"
+"Dockerfile"	"ARG YQ=v4.54.2:a4330671f17776618660a419ab2531e4f4dc48b6"	"ARG YQ=v4.54.2:0000000000000000000000000000000000000000"	"a yq from a commit other than the pinned one is built"
 "Dockerfile"	"ARG WAIT_FOR_PORT=v1.0.11:7874547cb49ec88b92a5fbf3dfee28bd6694cfc4"	"ARG WAIT_FOR_PORT=v1.0.11:0000000000000000000000000000000000000000"	"a helper from a commit other than the pinned one is built"
 "Dockerfile"	"build scuttle redboxllc/scuttle \"$SCUTTLE\" \"-X main.Version=${SCUTTLE%%:*}\" lift"	"build scuttle redboxllc/scuttle \"$SCUTTLE\" \"-X main.Version=${SCUTTLE%%:*}\" \"\""	"scuttle is built with its 2020 golang.org/x libraries again"
