@@ -79,8 +79,13 @@ check_init cache-redis-master-0 init-sysctl
 # What the init containers were for.
 owner="$(kubectl exec pg-postgresql-0 -c postgresql -- stat -c %u /bitnami/postgresql/data 2>/dev/null || true)"
 if [ "$owner" = 1001 ]; then ok "the PostgreSQL data directory belongs to 1001"; else bad "the PostgreSQL data directory belongs to '${owner}'"; fi
-if kubectl exec pg-postgresql-0 -c postgresql -- env PGPASSWORD="$(kubectl get secret pg-postgresql -o jsonpath='{.data.postgres-password}' | base64 -d)" \
-     psql -U postgres -tAc 'select 1' 2>/dev/null | grep -qx 1; then ok "PostgreSQL answers a query"; else bad "PostgreSQL does not answer"; fi
+# The password reaches psql on stdin and into its environment inside the pod:
+# `env PGPASSWORD=<value>` put it in kubectl's and env's arguments, where every
+# user on the machine reads it with ps.
+# shellcheck disable=SC2016  # expanded by the pod's shell
+if kubectl get secret pg-postgresql -o jsonpath='{.data.postgres-password}' | base64 -d \
+     | kubectl exec -i pg-postgresql-0 -c postgresql -- sh -c 'PGPASSWORD="$(cat)" psql -U postgres -tAc "select 1"' 2>/dev/null \
+     | grep -qx 1; then ok "PostgreSQL answers a query"; else bad "PostgreSQL does not answer"; fi
 value="$(kubectl exec cache-redis-master-0 -c redis -- cat /proc/sys/net/core/somaxconn 2>/dev/null || true)"
 if [ "$value" = "$SOMAXCONN" ]; then ok "redis sees net.core.somaxconn=${SOMAXCONN}"; else bad "redis sees net.core.somaxconn='${value}'"; fi
 
