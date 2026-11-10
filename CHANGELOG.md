@@ -9,7 +9,9 @@ and the pipeline that builds it.
 
 ## [Unreleased]
 
-_(no unreleased changes yet)_
+### Fixed
+
+- **The daily pin check no longer reports an index pushed again over the same builds as drift.** `freshness.yml` compared each pinned base digest with the digest its tag names now and failed on any difference, so a publisher pushing the index again over the very same images (a platform added, an attestation rewritten) turned it red for an image that had not changed. It now also compares the builds this image is made from under both digests: linux/amd64 for a stage built on the runner, linux/amd64 and linux/arm64 for a stage built for each published platform. The same builds pass with a notice naming both digests; a new build, or one that cannot be read, still fails. The `golang:1.27-bookworm` move in 1.0.2 was one of these: `sha256:b08bc994…` and `sha256:dc0963f3…` carry the same linux/amd64 and linux/arm64 builds, so the helpers were built in the same Go image as in 1.0.1.
 
 ## [1.0.2] - 2026-11-07
 
