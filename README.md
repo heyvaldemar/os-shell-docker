@@ -8,7 +8,7 @@
 
 A Debian shell for the init containers Helm charts run before their application: fixing the owner of a data volume, setting a kernel parameter, waiting for a port. Rebuilt every week, signed, and laid out like `bitnami/os-shell`, so a chart written for that image runs on this one unchanged.
 
-`bitnami/os-shell` has published one tag since August 2025: `latest`, and it is no longer Debian. It is built on VMware Photon OS 5.0. The versioned Debian tags stopped at `12-debian-12-r51` on 2025-08-19 and live on, unmaintained, as `bitnamilegacy/os-shell`, pulled 2.96 million times by 2026-10-28. A chart that pinned one of those tags stopped receiving fixes that day: on 2026-10-30 Trivy found 19 critical and 171 high findings in `12-debian-12-r51`, and 119 of them have a fix that image will never get.
+`bitnami/os-shell` has published one tag since August 2025: `latest`, and it is no longer Debian. It is built on VMware Photon OS 5.0. The versioned Debian tags stopped at `12-debian-12-r51` on 2025-08-19 and live on, unmaintained, as `bitnamilegacy/os-shell`, pulled 3.07 million times by 2026-11-12. A chart that pinned one of those tags stopped receiving fixes that day: on 2026-11-10 Trivy found 19 critical and 152 high findings in `12-debian-12-r51`, and 122 of them have a fix that image will never get.
 
 ```bash
 docker run --rm heyvaldemar/os-shell:12 bash -c 'id; cat /etc/debian_version'
@@ -61,18 +61,18 @@ Charts depend on how the image runs, not only on its shell. This one keeps what 
 
 ## CVE counts
 
-Counted by Trivy 0.76.1 on 2026-10-30 in [run 40994910781](https://github.com/heyvaldemar/os-shell-docker/actions/runs/40994910781), on the images as published, on `linux/amd64`, once per CVE and package, with no vendor statements applied:
+Counted by Trivy 0.76.1 on 2026-11-10 in [run 42728708644](https://github.com/heyvaldemar/os-shell-docker/actions/runs/42728708644), on the images as published, on `linux/amd64`, once per CVE and package, with no vendor statements applied:
 
 | Image | What it is | OS | Critical | High | Medium | Low | Critical and high with a fix |
 |---|---|---|---|---|---|---|---|
-| `bitnamilegacy/os-shell:12-debian-12-r51` | the last versioned `bitnami/os-shell`, frozen 2025-08-19 | Debian 12.11 | 19 | 171 | 289 | 217 | 119 |
-| `bitnami/os-shell:latest` | what `bitnami/os-shell` publishes now | Photon OS 5.0 | 0 | 5 | 13 | 1 | 5 |
-| `heyvaldemar/os-shell:12` | this image, Debian 12 line | Debian 12.15 | 1 | 71 | 125 | 166 | 0 |
-| `heyvaldemar/os-shell:13` | this image, Debian 13 line | Debian 13.7 | 0 | 56 | 95 | 156 | 0 |
+| `bitnamilegacy/os-shell:12-debian-12-r51` | the last versioned `bitnami/os-shell`, frozen 2025-08-19 | Debian 12.11 | 19 | 152 | 301 | 219 | 122 |
+| `bitnami/os-shell:latest` | what `bitnami/os-shell` publishes now | Photon OS 5.0 | 0 | 6 | 14 | 1 | 6 |
+| `heyvaldemar/os-shell:12` | this image, Debian 12 line | Debian 12.15 | 1 | 49 | 134 | 168 | 0 |
+| `heyvaldemar/os-shell:13` | this image, Debian 13 line | Debian 13.7 | 0 | 59 | 114 | 159 | 0 |
 
 - **The last column is the one a rebuild controls.** Every critical and high finding left in this image is one Debian has not fixed yet: Trivy lists no fixed version for it. `scripts/cve-gate.sh` refuses to publish an image that carries one with a fix, so the week Debian ships a fix, the next build carries it or nothing is published.
-- **`bitnami/os-shell:latest` has fewer findings in total, and it is a different operating system.** A chart that switched from a pinned Debian tag to `latest` now runs its init containers on Photon OS, with five high findings that already have a fix.
-- **The frozen image only gets worse.** Its 119 fixable findings are fixed in Debian and in Go, and none of those fixes will reach it.
+- **`bitnami/os-shell:latest` has fewer findings in total, and it is a different operating system.** A chart that switched from a pinned Debian tag to `latest` now runs its init containers on Photon OS, with six high findings that already have a fix.
+- **The frozen image only gets worse.** Its 122 fixable findings are fixed in Debian and in Go, and none of those fixes will reach it.
 
 The `Publish Docker Image` workflow counts again after every publish, on the images it has just published, and keeps the table as a run artifact.
 
@@ -86,7 +86,7 @@ Each test is shown the breaks it exists for (`tests/plants.tsv`, run in CI): the
 
 - Debian 12 and 13 slim, and the Go toolchain image, each pinned by digest; Dependabot moves the digests by pull request, gated by the full build and tests.
 - Every package brought to the newest version Debian's security archive has at build time, the base's own included.
-- The five helpers built from source with Go 1.27.3, each cloned at its release tag and refused unless the tag names the commit pinned in the `Dockerfile`; `go.sum` and the Go checksum database verify every dependency. `scuttle`'s last release (2022) pins `golang.org/x/net` and `x/text` from 2020; it is built with the versions pinned in the `Dockerfile`, which removes the findings against the old ones. The other four are built with the modules their releases name. The helpers' licences are in `/opt/bitnami/common/licenses`, and `/opt/bitnami/common/helpers.txt` lists each one's tag and commit.
+- The five helpers built from source with Go 1.27.4, each cloned at its release tag and refused unless the tag names the commit pinned in the `Dockerfile`; `go.sum` and the Go checksum database verify every dependency. `scuttle`'s last release (2022) pins `golang.org/x/net` and `x/text` from 2020; it is built with the versions pinned in the `Dockerfile`, which removes the findings against the old ones. The other four are built with the modules their releases name. The helpers' licences are in `/opt/bitnami/common/licenses`, and `/opt/bitnami/common/helpers.txt` lists each one's tag and commit.
 - Every published digest is signed with cosign, keyless, by this repository's workflow; SBOM (SPDX) and SLSA provenance are attached, and build provenance is attested in [GitHub Attestations](https://github.com/heyvaldemar/os-shell-docker/attestations).
 - Trivy scans every published line and reports critical and high fixable findings to the Security tab.
 - Every GitHub Action is pinned to a commit SHA, except the SLSA generator `release-assets.yml` calls by tag (`@v2.1.0`), because it verifies its own reference at run time and refuses a SHA.

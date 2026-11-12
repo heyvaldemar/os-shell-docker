@@ -28,7 +28,7 @@ ARG DEBIAN_MAJOR=12
 # still works. The other four are built with the modules their releases name,
 # and the CVE gate is what says that is still enough.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:dc0963f32053e4bc451d24d87e3892d42d01021b61f093e98eb95c0352bb84b0 AS tools
+FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -36,7 +36,7 @@ ARG WAIT_FOR_PORT=v1.0.11:7874547cb49ec88b92a5fbf3dfee28bd6694cfc4
 ARG RENDER_TEMPLATE=v1.0.10:bc9a6df0be359c708fdc675c7e2d3e5a92a4ab40
 ARG INI_FILE=v1.4.10:e7032a7f1f507af21709946d0d2a440124d1488b
 ARG SCUTTLE=v1.3.7:1c2b697935c10ef4b3e5e0dc0cf573a4d8766269
-ARG YQ=v4.54.2:a4330671f17776618660a419ab2531e4f4dc48b6
+ARG YQ=v4.54.3:f2944b823f84906a127dbd29e4c2a3e60c4e550e
 ARG X_NET=v0.62.0
 ARG X_TEXT=v0.43.0
 

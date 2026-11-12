@@ -84,6 +84,20 @@ as_both 1001 'ini-file set --section s --key k --value v /tmp/t.ini && ini-file 
 as_both 1001 'command -v wait-for-port >/dev/null && ! wait-for-port --timeout 1 --host 127.0.0.1 1'
 as_both 1001 'perl -MIO::Socket::INET -e "my \$s = IO::Socket::INET->new(LocalAddr => q(127.0.0.1), LocalPort => 18080, Listen => 1, ReuseAddr => 1) or die; sleep 6" & wait-for-port --timeout 5 --host 127.0.0.1 18080'
 as_both 1001 'printf "a: 1\n" | yq .a | grep -qx 1'
+# Bitnami's milvus chart edits its rendered configuration in place with
+# yq e -i, in this image, on files it wrote itself into an emptyDir.
+as_both 1001 'd=$(mktemp -d) && printf "kafka:\n  ssl:\n    enabled: false\n" > "$d/c.yaml" && yq e -i ".kafka.ssl.enabled = true" "$d/c.yaml" && yq .kafka.ssl.enabled "$d/c.yaml" | grep -qx true'
+
+# What yq v4.54.3 changed, as this image behaves now (CHANGELOG 1.0.3,
+# Upgrading). bitnami/os-shell's older yq does otherwise, so these run here
+# only: each was seen to fail on yq v4.54.2.
+here() {
+  local user="$1" c="$2" what="$3"
+  if docker run --rm --user "$user" "$IMAGE" bash -c "$c" >/dev/null 2>&1; then ok "$what"; else bad "$what: '$c' as $user fails here"; fi
+}
+here 1001 'd=$(mktemp -d) && printf "a: 1\n" > "$d/t.yaml" && ln -s "$d/t.yaml" "$d/l.yaml" && yq -i ".a = 2" "$d/l.yaml" && [ ! -L "$d/l.yaml" ] && yq .a "$d/t.yaml" | grep -qx 1 && yq .a "$d/l.yaml" | grep -qx 2' "yq -i replaces a symbolic link with the edited file and leaves its target as it was"
+here 1001 'd=$(mktemp -d) && printf "a: 1\n" > "$d/t.yaml" && chmod 444 "$d/t.yaml" && ! yq -i ".a = 2" "$d/t.yaml" && yq .a "$d/t.yaml" | grep -qx 1' "yq -i refuses a read-only file and leaves it as it was"
+here 1001 'd=$(mktemp -d) && mkdir "$d/w" && cd "$d/w" && ! printf "a: 1\n---\na: 2\n" | yq -s "\"../out_\" + \$index" && [ ! -e ../out_0.yml ]' "yq --split-exp writes nothing outside the current directory by default"
 as_both 1001 'id -u | grep -qx 1001 && id -g | grep -qx 0'
 
 [ "$fail" -eq 0 ] || { echo "Not a drop-in for bitnami/os-shell." >&2; exit 1; }
