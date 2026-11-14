@@ -119,7 +119,7 @@ ENV HOME=/ \
 
 LABEL org.opencontainers.image.title="os-shell" \
       org.opencontainers.image.description="A Debian shell for init containers, rebuilt weekly, signed; a drop-in for bitnami/os-shell." \
-      org.opencontainers.image.authors="Vladimir Mikhalev <v@valdemar.ai>" \
+      org.opencontainers.image.authors="Vladimir Mikhalev <connect@valdemar.ai>" \
       org.opencontainers.image.vendor="heyvaldemar" \
       org.opencontainers.image.source="https://github.com/heyvaldemar/os-shell-docker" \
       org.opencontainers.image.documentation="https://github.com/heyvaldemar/os-shell-docker#readme" \
