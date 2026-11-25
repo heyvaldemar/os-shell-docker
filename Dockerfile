@@ -28,7 +28,7 @@ ARG DEBIAN_MAJOR=12
 # still works. The other four are built with the modules their releases name,
 # and the CVE gate is what says that is still enough.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS tools
+FROM --platform=$BUILDPLATFORM golang:1.27-bookworm@sha256:ce59b41415e2524ae99926fe1f37ce48ba8c194dcbd2a56a65436cdcefa2bd34 AS tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -72,8 +72,8 @@ RUN set -euo pipefail; \
 # ──────────────────────────────────────────────────────────────────────────────
 # Stage 2: the image. Both bases are pinned by digest; DEBIAN_MAJOR picks one.
 # ──────────────────────────────────────────────────────────────────────────────
-FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc AS base-12
-FROM debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2 AS base-13
+FROM debian:bookworm-slim@sha256:e67eeead736ff7bbe258ef088bff683635c561b1fcfefad0806c1df4ab49ce0e AS base-12
+FROM debian:trixie-slim@sha256:8aa5a7bf5a1955bddbe7d74fcdd0b91ab30e74362a8b73af672b0481b35b44a0 AS base-13
 
 # hadolint ignore=DL3006
 FROM base-${DEBIAN_MAJOR} AS final
